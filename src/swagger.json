@@ -1,0 +1,189 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API desafio 04",
+    "description": "Desafio 05 da trilha de NodeJs do IGNITE da Rocketseat",
+    "contact": {
+      "name": "Marcos Wergles",
+      "email": "marcospsw96@gmail.com"
+    }
+  },
+  "host": "http://localhost:3333/api-docs",
+  "basePath": "/api-docs",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/users": {
+      "get": {
+        "description": "Lista todos os usuários caso o usuário requisitante seja ADMIN",
+        "operationId": "listUsers",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "headers",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de Usuários",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "400": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Cria usuário",
+        "operationId": "createUser",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "Usuário a ser criado",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário criado",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "description": "Retorna um único usuário com o ID",
+        "operationId": "findById",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "description": "Torna o usuário ADMIN baseado no ID",
+        "operationId": "turnOnAdmin",
+        "tags": ["Usuários"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID do usuário",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário está como ADMIN",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "404": {
+            "description": "Error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "admin": {
+          "type": "boolean"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
